@@ -1,5 +1,6 @@
 import sys
 import os
+import hashlib
 
 def main():
     if (len(sys.argv) == 1 or sys.argv[1] == "--help"):
@@ -20,12 +21,31 @@ def main():
             return 0
     elif (sys.argv[1] == "--add"):
         if (os.path.isfile("./" + sys.argv[2])):
+            filename = sys.argv[2]
+            filedir = hashlib.sha1()
+            filedir.update(filename.encode('utf-8'))
+            if (os.path.isdir("./.versionpy/objects/" + filedir.hexdigest())):
+                print("yup, in there")
+            else:
+                os.mkdir("./.versionpy/objects/" + filedir.hexdigest())
+                print("made it?")
+
+                    
+
+
+
+
+
+
+
+
             print("it's a file all right")
         else:
             print("that doesn't make sense to me")
         filepath = "." + sys.argv[2]
     else:
         print("oops")
+        
             
 
 
