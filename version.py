@@ -22,6 +22,9 @@ def main():
     else:
         print("sorry, I didn't understand that", file=sys.stderr)
 
+def status():
+    with open("./.versionpy/stage") as stage:
+        print(stage)
 
 def init():
     """
@@ -40,12 +43,24 @@ def init():
         return 0
 
 
-def stageFile(filename):
+def stageFile(filedir, hashname):
     """
     this is called within addFile, and it will add the appropriate info
     to the stage file
     """
-            
+    with open("./.versionpy/stage") as myfile:
+        lines = myfile.read().split('\n')
+
+    filename = "./.versionpy/objects/" + filedir.hexdigest() + "/" + hashname.hexdigest()
+
+    for line in lines:
+        if line == filename:
+            print("error: object already staged but not in object directory", file=sys.stderr)
+            return -1
+
+    with open("./.versionpy/stage", "a") as myfile:
+        myfile.writelines(filename + "\n")
+
 
 def addFile(filename):
     """
@@ -77,6 +92,8 @@ def addFile(filename):
 
         writefile.write(text)
         writefile.close()
+
+        stageFile(filedir, hashname)
 
     else: #this means the file with that name and date modified already exists
         print("error: that version is already in database", file=sys.stderr)
