@@ -1,5 +1,4 @@
 #pit.py
-
 It's a gitlike VCS in Python! Wow! It's called pit because it's not great.
 
 So you can do:
@@ -26,3 +25,12 @@ where commit is the hash of a commit your interested in, to get information
 about who committed it and which files were included.
 
 That's about it!
+
+###TODO:
+
+- branches
+- checkout
+- stash
+- history/git log
+
+
