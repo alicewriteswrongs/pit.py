@@ -14,6 +14,8 @@ def main():
             return -1
         else:
             os.mkdir("./.versionpy")
+            os.mkdir("./.versionpy/objects")
+            os.mkdir("./.versionpy/commits")
             print("created empty repository in .versionpy, enjoy!")
             return 0
     elif (sys.argv[1] == "--add"):
