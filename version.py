@@ -8,7 +8,7 @@ def main():
         print("\tversion.py --commit 'commit message'\twrite a commit with staged files")
         print("\tversion.py --help to display this message")
         return 0
-    elif (sys.argv[1]) == "--init":
+    elif (sys.argv[1] == "--init"):
         if (os.path.isdir("./.versionpy")):
             print("error: repository exists", file = sys.stderr)
             return -1
@@ -16,9 +16,16 @@ def main():
             os.mkdir("./.versionpy")
             print("created empty repository in .versionpy, enjoy!")
             return 0
+    elif (sys.argv[1] == "--add"):
+        if (os.path.isfile("./" + sys.argv[2])):
+            print("it's a file all right")
+        else:
+            print("that doesn't make sense to me")
+        filepath = "." + sys.argv[2]
     else:
         print("oops")
             
+
 
         
 
