@@ -127,6 +127,13 @@ def commitInfo(commitname):
     with open("./.versionpy/commits/" + commitname) as myfile:
         commit = json.parse(myfile)
 
+    print("Commited by " + commit['author'] + ":" + commit['message'])
+    print("Files commited:")
+
+    for line in commit['committed_files'].keys():
+        print("\t" + item)
+
+
 
 
 def addFile(filename):
