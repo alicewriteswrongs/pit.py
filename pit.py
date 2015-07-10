@@ -180,6 +180,22 @@ def branchCommit(branch, author):
     print("New branch '" + branch + "' committed to " + filename.hexdigest())
 
 
+def branchInfo():
+    """
+    get info about the current branches!
+    """
+    with open("./.pit/head", "r") as myfile:
+        commit = myfile.read()
+
+    with open("./.pit/branches", "r") as myfile:
+        branches = json.load(myfile)
+
+    print("Branches! Nice.")
+    for key in branches.keys():
+        if branches[key] == commit:
+            print("    ~*~ " + key + " ~*~")
+        else:
+            print('\t' + key)
 
 
 def commitInfo(commitname):
