@@ -10,6 +10,7 @@ def main():
         print("\tversion.py --add\t\tstage a file")
         print("\tversion.py --commit author message\twrite a commit with staged files")
         print("\tversion.py --status\t\tget information about staged files")
+        print("\tversion.py --info\t\tget information about a commit")
         print("\tversion.py --help to display this message")
         return 0
     elif (sys.argv[1] == "--init"):
@@ -23,8 +24,11 @@ def main():
         status()
     elif (sys.argv[1] == "commit"):
         writeCommit(sys.argv[2], sys.argv[3])
+    elif (sys.argv[1] == "--info"):
+        commitInfo(sys.argv[2])
     else:
         print("sorry, I didn't understand that", file=sys.stderr)
+
 
 def status():
     with open("./.versionpy/stage") as stage:
@@ -78,6 +82,7 @@ def stageFile(filename, filedir, hashname):
         with open("./.versionpy/stage", "a") as myfile:
             myfile.writelines(filename + '\t' + filepath + "\n")
 
+
 def writeCommit(author, message):
     """
     this will write a commit, clear the staging file, and reset the HEAD file
@@ -125,12 +130,12 @@ def commitInfo(commitname):
     get info about a commit!
     """
     with open("./.versionpy/commits/" + commitname) as myfile:
-        commit = json.parse(myfile)
+        commit = json.load(myfile)
 
-    print("Commited by " + commit['author'] + ":" + commit['message'])
+    print("Commited by " + commit['author'] + ". Message: " + commit['message'])
     print("Files commited:")
 
-    for line in commit['committed_files'].keys():
+    for item in commit['committed_files'].keys():
         print("\t" + item)
 
 
