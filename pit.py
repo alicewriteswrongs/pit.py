@@ -22,10 +22,15 @@ def main():
             print("error: not a file", file=sys.stderr)
     elif (sys.argv[1] == "--status"): # this will basically just print stage
         status()
-    elif (sys.argv[1] == "commit"):
-        writeCommit(sys.argv[2], sys.argv[3])
+    elif (sys.argv[1] == "--commit"):
+        writeCommit(sys.argv[2], sys.argv[3]) #author and message
     elif (sys.argv[1] == "--info"):
         commitInfo(sys.argv[2])
+    elif (sys.argv[1] == "--branch"):
+        if (len(sys.argv) == 2):
+            branchInfo()
+        else:
+            branchCommit(sys.argv[2], sys.argv[3]) #branch name and author
     else:
         print("sorry, I didn't understand that", file=sys.stderr)
 
@@ -56,6 +61,7 @@ def init():
         os.mkdir("./.pit/commits")
         open("./.pit/stage","w")
         open("./.pit/head","w")
+        open("./.pit/branches", "w")
         print("created empty repository in .pit, enjoy!")
         return 0
 
@@ -119,11 +125,62 @@ def writeCommit(author, message):
     with open("./.pit/commits/" + filename.hexdigest(), "w") as myfile:
         json.dump(commit, myfile)
 
+    #deal with branch related stuff
+    if commit['parent'] == "":
+        commit['branch'] = 'master'
+        branches = {'master': filename.hexdigest()}
+        with open("./.pit/branches", "w") as myfile:
+            json.dump(branches, myfile)
+
     #update head file (filename of latest commit)
     with open("./.pit/head","w") as myfile:
         myfile.write(filename.hexdigest())
 
     print("Commited " + str(filecounter) + " file(s) to " + filename.hexdigest())
+
+
+def branchCommit(branch, author):
+    """
+    this will write a commit, and create a new branch. a branch commit does
+    not commit working directory files, it just creates a branch and writes a
+    commit to that branch
+    """
+    commit = {}
+    commit['branch'] = branch
+    commit['author'] = author
+
+    #get parent
+    with open("./.pit/head", "r") as myfile:
+        commit['parent'] = myfile.read()
+
+    #this is blank, because we're doing a branch commit
+    committed = {}
+    commit['committed_files'] = committed
+
+    #write the commit file
+    filename = hashlib.sha1()
+    filename.update(branch.encode('utf-8') + author.encode('utf-8') + time.ctime().encode('utf-8'))
+    with open("./.pit/commits/" + filename.hexdigest(), "w") as myfile:
+        json.dump(commit, myfile)
+
+    #deal with branch related stuff
+    with open("./.pit/branches", "r") as myfile:
+        branches = json.load(myfile)
+
+    branches[branch] = filename.hexdigest()
+
+    with open("./.pit/branches","w") as myfile:
+        json.dump(branches, myfile)
+
+
+    #update head file (filename of latest commit)
+    with open("./.pit/head","w") as myfile:
+        myfile.write(filename.hexdigest())
+
+    print("New branch '" + branch + "' committed to " + filename.hexdigest())
+
+
+
 
 def commitInfo(commitname):
     """
@@ -137,8 +194,6 @@ def commitInfo(commitname):
 
     for item in commit['committed_files'].keys():
         print("\t" + item)
-
-
 
 
 def addFile(filename):
