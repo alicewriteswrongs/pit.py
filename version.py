@@ -8,6 +8,7 @@ def main():
         print("usage:  version.py --init\t\tstart a new repo")
         print("\tversion.py --add\t\tstage a file")
         print("\tversion.py --commit 'commit message'\twrite a commit with staged files")
+        print("\tversion.py --status\t\tget information about staged files")
         print("\tversion.py --help to display this message")
         return 0
     elif (sys.argv[1] == "--init"):
@@ -24,12 +25,14 @@ def main():
 
 def status():
     with open("./.versionpy/stage") as stage:
-        text = stage.read()
+        text = stage.readlines()
 
-    if (text == ""):
+    if (text == []):
         print("Nothing staged. Use python version.py --add myfile")
     else:
-        print(text)
+        print("Files currently staged for commit:")
+        for line in text:
+            print('\t' + line.split('\t')[0])
 
 
 def init():
@@ -49,23 +52,27 @@ def init():
         return 0
 
 
-def stageFile(filedir, hashname):
+def stageFile(filename, filedir, hashname):
     """
     this is called within addFile, and it will add the appropriate info
     to the stage file
     """
     with open("./.versionpy/stage") as myfile:
-        lines = myfile.read().split('\n')
+        lines = myfile.readlines()
 
-    filename = "./.versionpy/objects/" + filedir.hexdigest() + "/" + hashname.hexdigest()
+    filepath = "./.versionpy/objects/" + filedir.hexdigest() + "/" + hashname.hexdigest()
 
-    for line in lines:
-        if line == filename:
-            print("error: object already staged but not in object directory", file=sys.stderr)
-            return -1
+    if (lines == []):
+        with open("./.versionpy/stage", "a") as myfile:
+            myfile.writelines(filename + '\t' + filepath + "\n")
+    else:
+        for line in lines:
+            if (line.split('\t')[1] == filepath):
+                print("error: object already staged but not in object directory", file=sys.stderr)
+                return -1
 
-    with open("./.versionpy/stage", "a") as myfile:
-        myfile.writelines(filename + "\n")
+        with open("./.versionpy/stage", "a") as myfile:
+            myfile.writelines(filename + '\t' + filepath + "\n")
 
 
 def addFile(filename):
@@ -77,7 +84,6 @@ def addFile(filename):
     if the file is not in the directory at all, then it adds a
     new object folder, and add the first version of the file to it
     """
-    print(filename)
     filedir = hashlib.sha1()
     filedir.update(filename.encode('utf-8'))
     # no object dir? make it
@@ -99,7 +105,8 @@ def addFile(filename):
         writefile.write(text)
         writefile.close()
 
-        stageFile(filedir, hashname)
+        stageFile(filename, filedir, hashname)
+        print("Staged " + filename)
 
     else: #this means the file with that name and date modified already exists
         print("error: that version is already in database", file=sys.stderr)
