@@ -18,13 +18,19 @@ def main():
         else:
             print("error: not a file", file=sys.stderr)
     elif (sys.argv[1] == "--status"): # this will basically just print stage
-        print("nothing here for now")
+        status()
     else:
         print("sorry, I didn't understand that", file=sys.stderr)
 
 def status():
     with open("./.versionpy/stage") as stage:
-        print(stage)
+        text = stage.read()
+
+    if (text == ""):
+        print("Nothing staged. Use python version.py --add myfile")
+    else:
+        print(text)
+
 
 def init():
     """
