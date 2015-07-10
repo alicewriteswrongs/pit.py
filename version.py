@@ -11,26 +11,42 @@ def main():
         print("\tversion.py --help to display this message")
         return 0
     elif (sys.argv[1] == "--init"):
-        if (os.path.isdir("./.versionpy")):
-            print("error: repository exists", file = sys.stderr)
-            return -1
-        else:
-            os.mkdir("./.versionpy")
-            os.mkdir("./.versionpy/objects")
-            os.mkdir("./.versionpy/commits")
-            print("created empty repository in .versionpy, enjoy!")
-            return 0
+        init()
     elif (sys.argv[1] == "--add"):
         if (os.path.isfile("./" + sys.argv[2])):
-            # if file is in cwd then we can check to see if it's already in objects
             addFile(sys.argv[2])
         else:
             print("error: not a file", file=sys.stderr)
+    elif (sys.argv[1] == "--status"): # this will basically just print stage
+        print("nothing here for now")
     else:
         print("sorry, I didn't understand that", file=sys.stderr)
 
 
+def init():
+    """
+    this just checks for an existing repo, and if there isn't one it
+    will make a fresh one
+    """
+    if (os.path.isdir("./.versionpy")):
+        print("error: repository exists", file = sys.stderr)
+        return -1
+    else:
+        os.mkdir("./.versionpy")
+        os.mkdir("./.versionpy/objects")
+        os.mkdir("./.versionpy/commits")
+        open("./.versionpy/stage","w")
+        print("created empty repository in .versionpy, enjoy!")
+        return 0
+
+
+def stageFile(filename):
+    """
+    this is called within addFile, and it will add the appropriate info
+    to the stage file
+    """
             
+
 def addFile(filename):
     """
     checks to see if a file is already in the object directory,
