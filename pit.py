@@ -141,8 +141,6 @@ def writeCommit(author, message):
     #write the commit file
     filename = hashlib.sha1()
     filename.update(message.encode('utf-8') + author.encode('utf-8') + time.ctime().encode('utf-8'))
-    with open("./.pit/commits/" + filename.hexdigest(), "w") as myfile:
-        json.dump(commit, myfile)
 
     #deal with branch related stuff
     if commit['parent'] == "":
@@ -150,6 +148,11 @@ def writeCommit(author, message):
         branches = {'master': filename.hexdigest()}
         with open("./.pit/branches", "w") as myfile:
             json.dump(branches, myfile)
+    else:
+        commit['branch'] = parent['branch']
+
+    with open("./.pit/commits/" + filename.hexdigest(), "w") as myfile:
+        json.dump(commit, myfile)
 
     #update head file (filename of latest commit)
     with open("./.pit/head","w") as myfile:
@@ -176,6 +179,18 @@ def branchCommit(branch, author):
     committed = {}
     commit['committed_files'] = committed
 
+    #we need a 'previously' object in every commit
+    previously = {}
+    with open("./.pit/commits/" + commit['parent']) as myfile:
+        parent = json.load(myfile)
+    for key in parent['committed_files'].keys():
+        if key not in previously:
+            previously[key] = parent['committed_files'][key]
+    for key in parent['previous'].keys():
+        if key not in previously:
+            previously[key] = parent['previous'][key]
+    commit['previous'] = previously
+
     #write the commit file
     filename = hashlib.sha1()
     filename.update(branch.encode('utf-8') + author.encode('utf-8') + time.ctime().encode('utf-8'))
@@ -190,7 +205,6 @@ def branchCommit(branch, author):
 
     with open("./.pit/branches","w") as myfile:
         json.dump(branches, myfile)
-
 
     #update head file (filename of latest commit)
     with open("./.pit/head","w") as myfile:
