@@ -115,6 +115,15 @@ def writeCommit(author, message):
         filecounter += 1
     commit['committed_files'] = committed
 
+    previously_committed = {}
+    working = os.listdir(".")
+    alreadycommitted = os.listdir("./.pit/objects")
+    for item in working:
+        myhash = hashlib.sha1()
+        myhash.update(item.encode('utf-8'))
+        if myhash.hexdigest() in alreadycommitted:
+            previously_commited[item] = 
+
     #reset stage file
     with open("./.pit/stage", "w") as myfile:
         myfile.write("")
