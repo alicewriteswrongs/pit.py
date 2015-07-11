@@ -115,14 +115,24 @@ def writeCommit(author, message):
         filecounter += 1
     commit['committed_files'] = committed
 
-    previously_committed = {}
-    working = os.listdir(".")
-    alreadycommitted = os.listdir("./.pit/objects")
-    for item in working:
-        myhash = hashlib.sha1()
-        myhash.update(item.encode('utf-8'))
-        if myhash.hexdigest() in alreadycommitted:
-            previously_commited[item] = 
+    #deal with previously committed files (this way every commit
+    #has a complete description of the stage of the working 
+    #directory)
+    previous = {}
+    if commit['parent'] == "":
+        commit['previous'] = previous
+    else:
+        with open("./.pit/commits/" + commit['parent']) as myfile:
+            parent = json.load(myfile)
+
+        for key in parent['committed_files'].keys():
+            if key not in commit['committed_files']:
+                previous[key] = parent['committed_files'][key]
+
+        for key in parent['previous'].keys():
+            if key not in commit['committed_files']:
+                previous[key] = parents['previous'][key]
+        commit['previous'] = previous
 
     #reset stage file
     with open("./.pit/stage", "w") as myfile:
