@@ -28,6 +28,18 @@ To see the currently staged files.
 where commit is the hash of a commit your interested in, to get information
 about who committed it and which files were included.
 
+    pit branch
+
+To see info about the branches, and 
+    
+    pit branch branchname author
+
+To create a new branch `branchname` with author `author`. Then you can do:
+
+    pit checkout object
+
+to check out either a branch or a commit (there isn't a whole lot different
+between these, except that branches have human-readable names).
 
 That's about it!
 
@@ -35,5 +47,6 @@ That's about it!
 
 - stash
 - history/git log
+- user defined aliases for commits
 
 
