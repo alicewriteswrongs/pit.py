@@ -38,8 +38,30 @@ def main():
             branchCommit(sys.argv[2], sys.argv[3]) #branch name and author
     elif (sys.argv[1].strip('-') == "checkout"):
         checkout(sys.argv[2])
+    elif (sys.argv[1].strip('_') == "alias"):
+        alias(sys.argv[2], sys.argv[3])
     else:
         print("sorry, I didn't understand that", file=sys.stderr)
+
+
+def alias(alias, commit):
+    """
+    users can define aliases for important commits that they might
+    want to come back to
+    """
+    with open("./.pit/aliases") as myfile:
+        if myfile.read() != '':
+            aliases = json.load(myfile)
+        else:
+            aliases = {}
+
+    if alias not in aliases:
+        aliases[alias] = commit
+        print("Added alias " + alias + " to commit " + commit)
+        with open("./.pit/aliases","w") as myfile:
+            json.dump(aliases, myfile)
+    else:
+        print("error: alias already entered", file=sys.stderr)
 
 
 def status():
@@ -69,6 +91,7 @@ def init():
         open("./.pit/stage","w")
         open("./.pit/head","w")
         open("./.pit/branches", "w")
+        open("./.pit/aliases", "w")
         print("created empty repository in .pit, enjoy!")
         return 0
 
@@ -257,9 +280,13 @@ def checkout(argument): #could be commit hash or branch name
 
     with open("./.pit/branches") as myfile:
         branches = json.load(myfile)
+    with open("./.pit/aliases") as myfile:
+        aliases = json.load(myfile)
 
     if argument in branches:
         commitname = branches[argument]
+    elif argument in aliases:
+        commitname = aliases[argument]
     else:
         if (os.path.isfile("./.pit/commits/" + argument)):
             commitname = argument
