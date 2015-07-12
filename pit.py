@@ -138,7 +138,7 @@ def writeCommit(author, message):
 
         for key in parent['previous'].keys():
             if key not in commit['committed_files']:
-                previous[key] = parents['previous'][key]
+                previous[key] = parent['previous'][key]
         commit['previous'] = previous
 
     #reset stage file
@@ -157,6 +157,11 @@ def writeCommit(author, message):
             json.dump(branches, myfile)
     else:
         commit['branch'] = parent['branch']
+        with open("./.pit/branches", "r") as myfile:
+            branches = json.load(myfile)
+        branches[commit['branch']] = filename.hexdigest()
+        with open("./.pit/branches", "w") as myfile:
+            json.dump(branches, myfile)
 
     with open("./.pit/commits/" + filename.hexdigest(), "w") as myfile:
         json.dump(commit, myfile)
@@ -243,10 +248,10 @@ def checkout(argument): #could be commit hash or branch name
     takes a branch name or a commit hash, and changes the contents of the
     working directory to match the state at that commit
     """
-    with open("./.pit/stage", "r") as myfile:
+    with open("./.pit/stage") as myfile:
         stage = myfile.read()
 
-    if stage == "":
+    if stage != '':
         print("error: staged, uncommitted files in working directory.", file=sys.stderr)
         return 1
 
@@ -277,14 +282,7 @@ def checkout(argument): #could be commit hash or branch name
 
     #update branch?
     #I think we want to do this in case we're stepping back in a branch?
-    
-
-
-    
-    
-
-   
-    
+    return 0
 
 
 def commitInfo(commitname):
@@ -299,7 +297,7 @@ def commitInfo(commitname):
 
     for item in commit['committed_files'].keys():
         print("\t" + item)
-
+    return 0
 
 def addFile(filename):
     """
