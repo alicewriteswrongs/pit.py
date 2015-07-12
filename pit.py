@@ -9,14 +9,14 @@ import json
 
 def main():
     if (len(sys.argv) == 1 or sys.argv[1] == "--help"):
-        print("usage:  pit.py --init\t\tstart a new repo")
-        print("\tpit.py --add\t\tstage a file")
-        print("\tpit.py --commit author message\twrite a commit with staged files")
-        print("\tpit.py --status\t\tget information about staged files")
-        print("\tpit.py --branch branchName author\tto create a new branch")
-        print("\tpit.py --checkout arg\t to checkout a branch or commit")
-        print("\tpit.py --info\t\tget information about a commit")
-        print("\tpit.py --help to display this message")
+        print("usage:  pit init\t\t\tstart a new repo")
+        print("\tpit add\t\t\t\tstage a file")
+        print("\tpit commit author message\twrite a commit with staged files")
+        print("\tpit status\t\t\tget information about staged files")
+        print("\tpit branch branchName author\tto create a new branch")
+        print("\tpit checkout arg\t\tto checkout a branch or commit")
+        print("\tpit info\t\t\tget information about a commit")
+        print("\tpit help\t\t\tto display this message")
         return 0
     elif (sys.argv[1].strip('-') == "init"):
         init()
