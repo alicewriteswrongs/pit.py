@@ -1,35 +1,38 @@
 #pit.py
-It's a gitlike VCS in Python! Wow! It's called pit because it's not great.
+
+It's a gitlike VCS in Python! Wow! It's called pit because it's not great. It
+makes it a bit easier to use if you do:
+
+    ln -s /path/to/pit.py /usr/bin/pit
 
 So you can do:
 
-    python pit.py --init
+    pit init
 
 To create a new repo (in `.pit`).
 
-    python pit.py --add myfile
+    pit add myfile
 
 to stage `myfile`.
 
-    python pit.py --commit author 'commit message'
+    pit commit author 'commit message'
 
 to write a commit object, and 
 
-    python pit.py --status
+    pit status
 
 To see the currently staged files.
 
-    python pit.py --info commit
+    pit info commit
 
 where commit is the hash of a commit your interested in, to get information
 about who committed it and which files were included.
+
 
 That's about it!
 
 ###TODO:
 
-- branches
-- checkout
 - stash
 - history/git log
 
