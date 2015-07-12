@@ -10,27 +10,30 @@ def main():
         print("\tpit.py --add\t\tstage a file")
         print("\tpit.py --commit author message\twrite a commit with staged files")
         print("\tpit.py --status\t\tget information about staged files")
+        print("\tpit.py --branch branchName author\tto create a new branch")
+        print("\tpit.py --checkout arg\t to checkout a branch or commit")
         print("\tpit.py --info\t\tget information about a commit")
         print("\tpit.py --help to display this message")
         return 0
-    elif (sys.argv[1] == "--init"):
+    elif (sys.argv[1].strip('-') == "init"):
         init()
-    elif (sys.argv[1] == "--add"):
+    elif (sys.argv[1].strip('-') == "add"):
         if (os.path.isfile("./" + sys.argv[2])):
             addFile(sys.argv[2])
         else:
             print("error: not a file", file=sys.stderr)
-    elif (sys.argv[1] == "--status"): # this will basically just print stage
+    elif (sys.argv[1].strip('-') == "status"): # this will basically just print stage
         status()
-    elif (sys.argv[1] == "--commit"):
+    elif (sys.argv[1].strip('-') == "commit"):
         writeCommit(sys.argv[2], sys.argv[3]) #author and message
-    elif (sys.argv[1] == "--info"):
+    elif (sys.argv[1].strip('-') == "info"):
         commitInfo(sys.argv[2])
-    elif (sys.argv[1] == "--branch"):
+    elif (sys.argv[1].strip('-') == "branch"):
         if (len(sys.argv) == 2):
             branchInfo()
         else:
             branchCommit(sys.argv[2], sys.argv[3]) #branch name and author
+    elif (sys.argv[1].strip('-') == "checkout"):
     else:
         print("sorry, I didn't understand that", file=sys.stderr)
 
