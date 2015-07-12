@@ -16,6 +16,7 @@ def main():
         print("\tpit branch branchName author\tto create a new branch")
         print("\tpit checkout arg\t\tto checkout a branch or commit")
         print("\tpit info\t\t\tget information about a commit")
+        print("\tpit alias name commithash\tcreate an alias for any commit")
         print("\tpit help\t\t\tto display this message")
         return 0
     elif (sys.argv[1].strip('-') == "init"):
