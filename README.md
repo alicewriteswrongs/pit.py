@@ -41,6 +41,13 @@ To create a new branch `branchname` with author `author`. Then you can do:
 to check out either a branch or a commit (there isn't a whole lot different
 between these, except that branches have human-readable names).
 
+I also added an alias feature:
+
+    pit alias name commit
+
+This just lets you make a human readable name for a commit, which you can
+use to checkout that commit later.
+
 That's about it!
 
 ###TODO:
