@@ -1,5 +1,6 @@
 *.swp
 test.py
+.test/
 __pycache__/*
 .pit/
 versionpy/

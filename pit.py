@@ -271,7 +271,7 @@ def checkout(argument): #could be commit hash or branch name
         commit = json.load(myfile) 
 
     for key in commit['previous'].keys():
-        shutil.copy(commit['previous'][key], "./" + key)
+        shutil.copy(commit['previous'][key].strip('\n'), "./" + key)
  
     for key in commit['committed_files'].keys():
         shutil.copy(commit['committed_files'][key].strip('\n'), "./" + key)
