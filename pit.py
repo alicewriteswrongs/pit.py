@@ -236,12 +236,20 @@ def branchInfo():
             print("    ~*~ " + key + " ~*~")
         else:
             print('\t' + key)
+    return 0
 
 def checkout(argument): #could be commit hash or branch name
     """
     takes a branch name or a commit hash, and changes the contents of the
     working directory to match the state at that commit
     """
+    with open("./.pit/stage", "r") as myfile:
+        stage = myfile.read()
+
+    if stage == "":
+        print("error: staged, uncommitted files in working directory.", file=sys.stderr)
+        return 1
+
     with open("./.pit/branches") as myfile:
         branches = json.load(myfile)
 
@@ -251,7 +259,7 @@ def checkout(argument): #could be commit hash or branch name
         if (os.path.isfile("./.pit/commits/" + argument)):
             commitname = argument
         else:
-            print("error: " + argument + " is not a branch or a commit", file=sys.stderr);
+            print("error: " + argument + " is not a branch or a commit", file=sys.stderr)
             return 1
 
     with open("./.pit/commits/" + commitname) as myfile:
