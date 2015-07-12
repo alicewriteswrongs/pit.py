@@ -1,5 +1,8 @@
+#!/usr/bin/python
+
 import sys
 import os
+import shutil
 import hashlib
 import time
 import json
@@ -34,6 +37,7 @@ def main():
         else:
             branchCommit(sys.argv[2], sys.argv[3]) #branch name and author
     elif (sys.argv[1].strip('-') == "checkout"):
+        checkout(sys.argv[2])
     else:
         print("sorry, I didn't understand that", file=sys.stderr)
 
@@ -232,6 +236,47 @@ def branchInfo():
             print("    ~*~ " + key + " ~*~")
         else:
             print('\t' + key)
+
+def checkout(argument): #could be commit hash or branch name
+    """
+    takes a branch name or a commit hash, and changes the contents of the
+    working directory to match the state at that commit
+    """
+    with open("./.pit/branches") as myfile:
+        branches = json.load(myfile)
+
+    if argument in branches:
+        commitname = branches[argument]
+    else:
+        if (os.path.isfile("./.pit/commits/" + argument)):
+            commitname = argument
+        else:
+            print("error: " + argument + " is not a branch or a commit", file=sys.stderr);
+            return 1
+
+    with open("./.pit/commits/" + commitname) as myfile:
+        commit = json.load(myfile) 
+
+    for key in commit['previous'].keys():
+        shutil.copy(commit['previous'][key], "./" + key)
+ 
+    for key in commit['committed_files'].keys():
+        shutil.copy(commit['committed_files'][key].strip('\n'), "./" + key)
+
+    #update head
+    with open("./.pit/head", "w") as myfile:
+        myfile.write(commitname)
+
+    #update branch?
+    #I think we want to do this in case we're stepping back in a branch?
+    
+
+
+    
+    
+
+   
+    
 
 
 def commitInfo(commitname):
