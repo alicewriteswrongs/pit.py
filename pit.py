@@ -92,7 +92,9 @@ def init():
         open("./.pit/stage","w")
         open("./.pit/head","w")
         open("./.pit/branches", "w")
-        open("./.pit/aliases", "w")
+        aliases = {}
+        with open("./.pit/aliases", "w") as myfile:
+            json.dump(aliases, myfile)
         print("created empty repository in .pit, enjoy!")
         return 0
 
