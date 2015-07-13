@@ -1,7 +1,11 @@
 #pit.py
 
-It's a gitlike VCS in Python! Wow! It's called pit because it's not great. It
-makes it a bit easier to use if you do:
+It's a gitlike VCS in Python! Wow! It's called pit because it's not great.
+Pit is written in Python 3, and it expects it to be at /usr/bin/python3.
+If you're python 3 is a different place you can probably either edit
+pit.py or make a symlink.
+
+It makes it a bit easier to use if you do:
 
     sudo ln -s /path/to/pit.py /usr/bin/pit
 
