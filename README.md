@@ -58,4 +58,4 @@ That's about it!
 
 - stash
 - history/git log
-- user defined aliases for commits
+- diff
