@@ -3,7 +3,7 @@
 It's a gitlike VCS in Python! Wow! It's called pit because it's not great. It
 makes it a bit easier to use if you do:
 
-    ln -s /path/to/pit.py /usr/bin/pit
+    sudo ln -s /path/to/pit.py /usr/bin/pit
 
 So you can do:
 
@@ -55,5 +55,3 @@ That's about it!
 - stash
 - history/git log
 - user defined aliases for commits
-
-
