@@ -120,7 +120,7 @@ def diff(hashone, hashtwo):
         with open(oldfiles[filename].strip('\n')) as myfile:
             oldlines.extend(myfile.readlines())
         with open(newfiles[filename].strip('\n')) as myfile:
-            newlines.extend(myfile.readline())
+            newlines.extend(myfile.readlines())
 
     for key in newfiles:
         if key not in oldfiles:
