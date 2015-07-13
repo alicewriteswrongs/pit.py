@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import difflib
 import sys
 import os
 import shutil
@@ -17,6 +18,7 @@ def main():
         print("\tpit checkout arg\t\tto checkout a branch or commit")
         print("\tpit info\t\t\tget information about a commit")
         print("\tpit alias name commithash\tcreate an alias for any commit")
+        print("\tpit diff commit1 commit2\tcreate an alias for any commit")
         print("\tpit help\t\t\tto display this message")
         return 0
     elif (sys.argv[1].strip('-') == "init"):
@@ -39,8 +41,10 @@ def main():
             branchCommit(sys.argv[2], sys.argv[3]) #branch name and author
     elif (sys.argv[1].strip('-') == "checkout"):
         checkout(sys.argv[2])
-    elif (sys.argv[1].strip('_') == "alias"):
+    elif (sys.argv[1].strip('-') == "alias"):
         alias(sys.argv[2], sys.argv[3])
+    elif (sys.argv[1].strip('-') == "diff"):
+        diff(sys.argv[2], sys.argv[3])
     else:
         print("sorry, I didn't understand that", file=sys.stderr)
 
@@ -73,6 +77,59 @@ def status():
         for line in text:
             print('\t' + line.split('\t')[0])
 
+
+def combineDict(dictone, dicttwo):
+    """
+    combine two dictionaries, preferring the first
+    argument (if dupes)
+    """ 
+    newdict = {}
+    keys = set(list(dictone.keys()) + list(dicttwo.keys()))
+    for key in keys:
+        if key in dictone:
+            newdict[key] = dictone[key]
+        else:
+            newdict[key] = dicttwo[key]
+    return newdict
+ 
+
+def diff(hashone, hashtwo):
+    # we want to sort these commits, and find out which one is earlier
+    pathone = ".pit/commits/" + hashone
+    pathtwo = ".pit/commits/" + hashtwo
+
+    if (os.path.getmtime(pathone) < os.path.getmtime(pathtwo)):
+        with open(pathone) as myfile:
+            earlier = json.load(myfile)
+        with open(pathtwo) as myfile:
+            later = json.load(myfile)
+    else:
+        with open(pathtwo) as myfile:
+            earlier = json.load(myfile)
+        with open(pathone) as myfile:
+            later = json.load(myfile)
+
+    mydiff = difflib.Differ()
+
+    oldfiles = combineDict(earlier['committed_files'], earlier['previous'])
+    newfiles = combineDict(later['committed_files'], later['previous'])
+    oldlines = []
+    newlines = []
+
+    for filename in oldfiles:
+        with open(oldfiles[filename].strip('\n')) as myfile:
+            oldlines.extend(myfile.readlines())
+        with open(newfiles[filename].strip('\n')) as myfile:
+            newlines.extend(myfile.readline())
+
+    for key in newfiles:
+        if key not in oldfiles:
+            with open(newfiles[key]) as myfile:
+                newlines.extend(myfile.readline())
+
+    print(''.join(mydiff.compare(oldlines, newlines)))
+
+           
 
 def init():
     """
