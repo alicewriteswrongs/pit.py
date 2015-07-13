@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import sys
 import os
@@ -51,10 +51,7 @@ def alias(alias, commit):
     want to come back to
     """
     with open("./.pit/aliases") as myfile:
-        if myfile.read() != '':
-            aliases = json.load(myfile)
-        else:
-            aliases = {}
+        aliases = json.load(myfile)
 
     if alias not in aliases:
         aliases[alias] = commit
