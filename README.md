@@ -1,9 +1,9 @@
 #pit.py
 
 It's a gitlike VCS in Python! Wow! It's called pit because it's not great.
-Pit is written in Python 3, and it expects it to be at /usr/bin/python3.
-If you're python 3 is a different place you can probably either edit
-pit.py or make a symlink.
+Pit is written in Python 3, and it expects it to be at /usr/bin/python3. If
+your python 3 is in a different place you can probably either edit pit.py or
+make a symlink.
 
 It makes it a bit easier to use if you do:
 
@@ -42,7 +42,7 @@ To create a new branch `branchname` with author `author`. Then you can do:
 
     pit checkout object
 
-to check out either a branch or a commit (there isn't a whole lot different
+to check out either a branch or a commit (there isn't a whole lot of difference
 between these, except that branches have human-readable names).
 
 I also added an alias feature:
