@@ -54,7 +54,7 @@ use to checkout that commit later.
 
 That's about it!
 
-###TODO:
+### TODO:
 
 - stash
 - history/git log
