@@ -1,4 +1,4 @@
-#pit.py
+# pit.py
 
 It's a gitlike VCS in Python! Wow! It's called pit because it's not great.
 Pit is written in Python 3, and it expects it to be at /usr/bin/python3. If
